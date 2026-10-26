@@ -546,7 +546,7 @@
                 <div class="lf" contenteditable="true" role="textbox" spellcheck="false" aria-label="SPAS ID" data-ph="SPAS ID"></div><span class="id-sep">,&nbsp;</span>
                 <div class="dd dd-inline" id="programDD"><button type="button" class="dd-btn" id="programBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Scholarship Program"><span class="dd-text" id="programText" data-ph="Scholarship Program"></span><svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button></div>
               </div>
-              <div class="letter-text lf lf-addr" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="false" aria-label="Complete Address" data-ph="Complete Address"></div>
+              <div class="letter-text lf lf-addr" contenteditable="plaintext-only" data-multiline="1" role="textbox" aria-multiline="true" spellcheck="false" aria-label="Complete Address" data-ph="Complete Address"></div>
               <div class="date-row">
                 <div class="date-wrapper" style="display:flex;">
                   <input type="text" class="inp-line text-date" placeholder="Month DD, YYYY" aria-label="Date">
@@ -1850,16 +1850,17 @@
 
   /* ===== Letter header fields (name, SPAS ID, address, date) ===== */
   document.querySelectorAll('.lf[contenteditable]').forEach(function (f) {
-    f.addEventListener('keydown', function (e) { if (e.key === 'Enter') e.preventDefault(); });
+    f.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !f.dataset.multiline) e.preventDefault(); });
     f.addEventListener('paste', function (e) {
       e.preventDefault();
-      const t = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\s*[\r\n]+\s*/g, ' ');
+      const raw = (e.clipboardData || window.clipboardData).getData('text/plain');
+      const t = f.dataset.multiline ? raw.replace(/\r\n?/g, '\n').replace(/[ \t]*\n[ \t]*/g, '\n') : raw.replace(/\s*[\r\n]+\s*/g, ' ');
       document.execCommand('insertText', false, t);
     });
-    f.addEventListener('input', function () {
+    f.addEventListener('input', function (e) {
       if (!f.textContent.replace(/\u200b/g, '')) f.innerHTML = '';
       reflowIfNeeded();
-      histRecord('typing');
+      histRecord(/^(insertText|deleteContent)/.test((e && e.inputType) || '') ? 'typing' : 'other');
     });
   });
   document.querySelectorAll('.date-row .text-date').forEach(function (i) { i.addEventListener('input', fitToScreen); });
