@@ -126,7 +126,7 @@
   .letter-sal { margin-bottom: 14px; }
   .ta {
     display: block; width: 100%; margin: 0; padding: 2px 0; border: none; outline: none; resize: none;
-    background: transparent; color: #000; font-size: var(--ta-size); line-height: 1.45;
+    background: transparent; color: #000; font-size: var(--ta-size); line-height: 1;
     white-space: pre-wrap; overflow-wrap: anywhere; cursor: text; -webkit-user-modify: read-write;
   }
   .letter-body { flex: 0 1 auto; min-height: 60px; overflow: hidden; }
@@ -147,7 +147,8 @@
   @media screen and (hover: hover) { .lf:hover:not(:focus) { background-color: rgba(0, 68, 102, 0.045); } }
   @media screen { .ta[data-ph]:empty::before { content: attr(data-ph); color: #94a3b8; pointer-events: none; } }
   .closing-slot { flex: none; margin-top: calc(3 * var(--ta-size) * var(--ta-lh, 1.45)); }
-  .closing { width: 2.8in; }
+  .closing { width: 100%; display: flex; justify-content: space-between; align-items: flex-start; gap: 0.4in; }
+  .closing-block { width: 2.8in; flex: none; }
   .closing .letter-text { margin: 0 0 2px; }
   .closing .sig-input-area { height: calc(4 * var(--ta-size) * var(--ta-lh, 1.45)); }
   .closing .inp-line { font-size: var(--ta-size); }
@@ -570,10 +571,19 @@
             <div class="ta letter-body" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" aria-label="Body of the letter" data-ph="Type the body of your letter here"></div>
             <div class="closing-slot">
               <div class="closing" id="closing">
-                <p class="letter-text">Respectfully,</p>
-                <div class="sig-input-area"><input type="text" class="inp-line" placeholder="Name" aria-label="Name"></div>
-                <div class="date-wrapper" style="display:flex;width:100%;max-width:none;margin-top:14px;">
-                  <input type="text" class="inp-line text-date" placeholder="Month DD, YYYY" aria-label="Date" style="text-align:left">
+                <div class="closing-block">
+                  <p class="letter-text">Respectfully,</p>
+                  <div class="sig-input-area"><input type="text" class="inp-line" placeholder="Complete Name" aria-label="Respectfully Complete Name"></div>
+                  <div class="date-wrapper" style="display:flex;width:100%;max-width:none;margin-top:14px;">
+                    <input type="text" class="inp-line text-date" placeholder="Month DD, YYYY" aria-label="Respectfully Date" style="text-align:left">
+                  </div>
+                </div>
+                <div class="closing-block">
+                  <p class="letter-text">Noted by:</p>
+                  <div class="sig-input-area"><input type="text" class="inp-line" placeholder="Complete Name" aria-label="Noted by Complete Name"></div>
+                  <div class="date-wrapper" style="display:flex;width:100%;max-width:none;margin-top:14px;">
+                    <input type="text" class="inp-line text-date" placeholder="Month DD, YYYY" aria-label="Noted by Date" style="text-align:left">
+                  </div>
                 </div>
               </div>
             </div>
